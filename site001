@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Notícias Moderno</title>
+    <style>
+        /* Reset Básico e Estilos Globais */
+        :root {
+            --primary-color: #3498db; /* Azul moderno */
+            --secondary-color: #2c3e50; /* Azul escuro/cinza */
+            --accent-color: #e74c3c; /* Vermelho para destaque */
+            --light-gray: #ecf0f1;
+            --dark-gray: #34495e;
+            --text-color: #333;
+            --font-family: 'Arial', sans-serif; /* Fonte limpa */
+            --container-width: 1100px;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.6;
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--accent-color);
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        h1, h2, h3, h4 {
+            margin-bottom: 0.8rem;
+            color: var(--secondary-color);
+            line-height: 1.3;
+        }
+
+        /* Cabeçalho */
+        .site-header {
+            background-color: var(--secondary-color);
+            color: #fff;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .site-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .main-nav ul {
+            display: flex;
+        }
+
+        .main-nav ul li {
+            margin-left: 20px;
+        }
+
+        .main-nav ul li a {
+            color: #fff;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        .main-nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .main-nav ul li a:hover::after,
+        .main-nav ul li a.active::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none; /* Escondido em telas maiores */
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Conteúdo Principal */
+        .main-content {
+            padding: 2rem 0;
+            flex-grow: 1;
+        }
+
+        .featured-article {
+            background-color: #fff;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .featured-article img {
+            width: 50%;
+            max-height: 350px;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+        }
+
+        .featured-article-content {
+            width: 50%;
+        }
+
+        .featured-article h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .featured-article .meta-info {
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-color);
+            color: #fff;
+        }
+
+        /* Grid de Notícias */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .news-card {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            overflow: hidden; /* Para o border-radius da imagem */
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .news-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .news-card-content {
+            padding: 1rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-card p {
+            font-size: 0.95rem;
+            color: #555;
+            flex-grow: 1;
+            margin-bottom: 1rem;
+        }
+
+        .news-card .read-more {
+            font-size: 0.9rem;
+            font-weight: bold;
+            align-self: flex-start;
+        }
+
+        /* Rodapé */
+        .site-footer {
+            background-color: var(--dark-gray);
+            color: var(--light-gray);
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: auto; /* Empurra o rodapé para baixo */
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .site-header .container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .main-nav {
+                width: 100%;
+                margin-top: 1rem;
+                display: none; /* Escondido por padrão em mobile */
+            }
+
+            .main-nav.active {
+                display: block; /* Mostra quando ativo pelo JS */
+            }
+
+            .main-nav ul {
+                flex-direction: column;
+            }
+
+            .main-nav ul li {
+                margin: 0;
+                text-align: center;
+            }
+
+            .main-nav ul li a {
+                display: block;
+                padding: 0.8rem;
+                border-bottom: 1px solid #4a6274;
+            }
+             .main-nav ul li a::after {
+                display: none; /* Remove sublinhado animado no mobile */
+            }
+
+            .menu-toggle {
+                display: block; /* Mostra o botão de menu */
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+            }
+
+            .featured-article {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .featured-article img,
+            .featured-article-content {
+                width: 100%;
+            }
+
+            .featured-article img {
+                margin-bottom: 1rem;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr; /* Uma coluna em telas menores */
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container">
+            <a href="#" class="logo">NotíciasDev</a>
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">☰</button>
+            <nav class="main-nav" id="mainNav">
+                <ul>
+                    <li><a href="#" class="active">Principal</a></li>
+                    <li><a href="#">Tecnologia</a></li>
+                    <li><a href="#">Esportes</a></li>
+                    <li><a href="#">Economia</a></li>
+                    <li><a href="#">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <section class="featured-article">
+                <img src="https://via.placeholder.com/600x350/3498db/ffffff?text=Notícia+Destaque" alt="Notícia em destaque">
+                <div class="featured-article-content">
+                    <span class="meta-info">Tecnologia • <time datetime="2025-05-30">30 de Maio, 2025</time></span>
+                    <h2>Inteligência Artificial Revoluciona o Desenvolvimento Web</h2>
+                    <p>Novas ferramentas baseadas em IA estão permitindo que desenvolvedores criem sites mais complexos e interativos em tempo recorde. Descubra como essa tecnologia está moldando o futuro da web.</p>
+                    <a href="#" class="btn">Leia Mais</a>
+                </div>
+            </section>
+
+            <section class="latest-news">
+                <h2>Últimas Notícias</h2>
+                <div class="news-grid">
+                    <article class="news-card">
+                        <img src="https://via.placeholder.com/400x200/2ecc71/ffffff?text=Esportes" alt="Imagem da notícia sobre esportes">
+                        <div class="news-card-content">
+                            <h3>Campeonato Nacional Define Finalistas</h3>
+                            <p>Após jogos emocionantes, as equipes X e Y garantem vaga na grande final do campeonato nacional de futebol.</p>
+                            <a href="#" class="read-more">Leia Mais &rarr;</a>
+                        </div>
+                    </article>
+
+                    <article class="news-card">
+                        <img src="https://via.placeholder.com/400x200/e74c3c/ffffff?text=Economia" alt="Imagem da notícia sobre economia">
+                        <div class="news-card-content">
+                            <h3>Mercado Financeiro Reage a Novas Políticas</h3>
+                            <p>Analistas discutem o impacto das recentes medidas econômicas anunciadas pelo governo no mercado de ações.</p>
+                            <a href="#" class="read-more">Leia Mais &rarr;</a>
+                        </div>
+                    </article>
+
+                    <article class="news-card">
+                        <img src="https://via.placeholder.com/400x200/9b59b6/ffffff?text=Ciência" alt="Imagem da notícia sobre ciência">
+                        <div class="news-card-content">
+                            <h3>Nova Descoberta Científica Promete Avanços na Medicina</h3>
+                            <p>Pesquisadores anunciam um avanço significativo que pode levar a novos tratamentos para doenças complexas.</p>
+                            <a href="#" class="read-more">Leia Mais &rarr;</a>
+                        </div>
+                    </article>
+                     <article class="news-card">
+                        <img src="https://via.placeholder.com/400x200/f1c40f/000000?text=Cultura" alt="Imagem da notícia sobre cultura">
+                        <div class="news-card-content">
+                            <h3>Festival de Cinema Independente Anuncia Vencedores</h3>
+                            <p>O aclamado festival celebrou o cinema autoral e premiou obras inovadoras de diversas partes do mundo.</p>
+                            <a href="#" class="read-more">Leia Mais &rarr;</a>
+                        </div>
+                    </article>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; <span id="currentYear"></span> Portal NotíciasDev. Todos os direitos reservados.</p>
+            <p>Um site de exemplo moderno e limpo.</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript para funcionalidades básicas
+
+        // Menu responsivo
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.getElementById('mainNav');
+
+        if (menuToggle && mainNav) {
+            menuToggle.addEventListener('click', () => {
+                mainNav.classList.toggle('active');
+                // Alterna o ícone do menu (opcional)
+                if (mainNav.classList.contains('active')) {
+                    menuToggle.innerHTML = '✕'; // Ícone de fechar
+                    menuToggle.setAttribute('aria-label', 'Fechar menu');
+                } else {
+                    menuToggle.innerHTML = '☰'; // Ícone de hamburguer
+                    menuToggle.setAttribute('aria-label', 'Abrir menu');
+                }
+            });
+        }
+
+        // Atualizar ano no rodapé
+        const currentYearSpan = document.getElementById('currentYear');
+        if (currentYearSpan) {
+            currentYearSpan.textContent = new Date().getFullYear();
+        }
+
+        // Smooth scroll para links âncora (se houver)
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const hrefAttribute = this.getAttribute('href');
+                // Verifica se é apenas um link "#" ou se o alvo existe
+                if (hrefAttribute.length > 1 && document.querySelector(hrefAttribute)) {
+                    e.preventDefault();
+                    document.querySelector(hrefAttribute).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                } else if (hrefAttribute === '#') {
+                    e.preventDefault(); // Previne o scroll para o topo da página se for só "#"
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Exemplo de como adicionar um "efeito" ao carregar as notícias
+        // Poderia ser usado para carregar notícias dinamicamente, mas aqui é só um exemplo de interação.
+        window.addEventListener('load', () => {
+            const newsCards = document.querySelectorAll('.news-card');
+            newsCards.forEach((card, index) => {
+                card.style.animation = `fadeInUp 0.5s ease-out ${index * 0.1}s forwards`;
+                card.style.opacity = 0; // Começa invisível para a animação
+            });
+        });
+
+        // Adiciona a keyframes animation via JS para manter tudo no mesmo arquivo
+        const styleSheet = document.createElement("style")
+        styleSheet.type = "text/css"
+        styleSheet.innerText = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+
+        console.log("Página de Notícias Moderna carregada!");
+
+    </script>
+</body>
+</html>
